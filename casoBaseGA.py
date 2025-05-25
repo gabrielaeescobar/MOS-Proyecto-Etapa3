@@ -13,11 +13,13 @@ class GeneticAlgorithmMTSP:
     
     This implementation uses advanced crossover and mutation operators specifically designed 
     for MTSP as recommended in academic literature.
+
     """
     
     def __init__(self, cost_matrix, num_cities, num_travelers=3, depots=None, 
                  population_size=100, generations=500, mutation_rate=0.2, 
-                 crossover_rate=0.8, elitism_rate=0.1, tournament_size=5):
+                 crossover_rate=0.8, elitism_rate=0.1, tournament_size=5,
+                  demanda=None, capacidades=None, autonomias=None):
         """
         Initialize the Genetic Algorithm solver.
         
@@ -60,6 +62,12 @@ class GeneticAlgorithmMTSP:
         self.fitness_history = []
         self.best_solution_history = []
         self.population = []
+
+        # Problem-specific parameters
+        self.demanda = demanda if demanda else {}  # dict: {city_id (0-based): demand}
+        self.capacidades = capacidades if capacidades else [float('inf')] * num_travelers
+        self.autonomias = autonomias if autonomias else [float('inf')] * num_travelers
+
         
     def initialize_population(self):
         """
@@ -167,13 +175,34 @@ class GeneticAlgorithmMTSP:
         cost += self.cost_matrix[route[-1]-1][depot-1]  # Return to depot
         return cost
     
-    def evaluate_fitness(self, solution):
-        """Calculate the fitness (total cost) of a solution."""
+    def evaluate_fitness(self, solution): # modificar para añadir las nuevas restricciones: capacidad, autonomía 
+        """Calculate the fitness (total cost) of a solution. Also applies penalties for violations.
+        Penalties are applied for:
+        1. Not using all vehicles (empty routes)
+        2. Exceeding vehicle capacity
+        3. Exceeding vehicle autonomy
+        """
         total_cost = 0
         
-        for route in solution:
+        for k, route in enumerate(solution):
             total_cost += self._route_cost(route)
-            
+
+            # Penalize solutions that do not use all vehicles
+            if not route:
+                total_cost += 1e6  # Large penalty for empty route
+
+            # Penalize solutions that exceed vehicle capacity
+            carga = sum(self.demanda.get(city-1, 0) for city in route)
+            if carga > self.capacidades[k]:
+                penalized_cost = 1e6 * (carga - self.capacidades[k])
+                total_cost += penalized_cost
+
+            # Penalize solutions that exceed vehicle autonomy
+            distancia = self._route_cost(route)
+            if distancia > self.autonomias[k]:
+                penalized_cost = 1e6 * (distancia - self.autonomias[k])
+                total_cost += penalized_cost
+
         return total_cost
     
     def select_parents(self):
@@ -719,7 +748,10 @@ if __name__ == "__main__":
         mutation_rate=0.2,
         crossover_rate=0.8,
         elitism_rate=0.1,
-        tournament_size=5
+        tournament_size=5,
+        demanda=demanda,
+        capacidades=capacidades,
+        autonomias=autonomias
     )
 
     # Solve
