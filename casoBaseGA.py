@@ -682,19 +682,19 @@ class GeneticAlgorithmMTSP:
 def read_problem_data():
     import pandas as pd
 
-    # Cargar matriz de distancias
+    # distancias
     cost_matrix = pd.read_csv('Proyecto_Caso_Base/distancias.csv', header=None).values
 
-    # Cargar datos de clientes
+    # clientes
     clientes = pd.read_csv('Proyecto_Caso_Base/clients.csv')
     demanda = {int(row['LocationID']) - 1: float(row['Demand']) for _, row in clientes.iterrows()}
 
-    # Cargar vehículos
+    # vehículos
     vehiculos = pd.read_csv('Proyecto_Caso_Base/vehicles.csv')
     capacidades = [float(row['Capacity']) for _, row in vehiculos.iterrows()]
     autonomias = [float(row['Range']) for _, row in vehiculos.iterrows()]
     
-    # Cargar depósito
+    # depósito
     depositos = pd.read_csv('Proyecto_Caso_Base/depots.csv')
     depot_ids = [int(row['LocationID']) for _, row in depositos.iterrows()]
 
@@ -706,11 +706,9 @@ def read_problem_data():
 if __name__ == "__main__":
     cost_matrix, demanda, capacidades, autonomias, depot_ids = read_problem_data()
 
-    # Asignaciones clave
     num_cities = len(cost_matrix)
     num_travelers = len(capacidades)  # uno por vehículo
 
-    # Crear y correr el algoritmo genético
     ga = GeneticAlgorithmMTSP(
         cost_matrix=cost_matrix,
         num_cities=num_cities,
