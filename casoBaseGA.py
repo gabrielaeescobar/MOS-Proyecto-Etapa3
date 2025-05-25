@@ -6,6 +6,7 @@ import time
 import csv
 from collections import defaultdict
 from copy import deepcopy
+import pandas as pd
 
 class GeneticAlgorithmMTSP:
     """
@@ -709,7 +710,6 @@ class GeneticAlgorithmMTSP:
 
 
 def read_problem_data():
-    import pandas as pd
 
     # distancias
     cost_matrix = pd.read_csv('Proyecto_Caso_Base/distancias.csv', header=None).values
