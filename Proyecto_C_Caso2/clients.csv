@@ -1,0 +1,15 @@
+LocationID, ClientID,City/Municipality,Demand,LocationID
+2, 1,Bogotá,30.0,2
+3, 2,Medellín,25.0,3
+4, 3,Cali,22.0,4
+5, 4,Cartagena,18.0,5
+6, 5,Cúcuta,15.0,6
+7, 6,Bucaramanga,17.0,7
+8, 7,Pereira,12.0,8
+9, 8,Santa Marta,10.0,9
+10, 9,Ibagué,11.0,10
+11, 10,Manizales,9.0,11
+12, 11,Neiva,10.0,12
+13, 12,Barranquilla,7.0,13
+14, 13,Villavicencio,8.0,14
+15, 14,Armenia,10.0,15
