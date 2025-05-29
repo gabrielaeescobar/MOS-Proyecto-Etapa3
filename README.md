@@ -25,7 +25,7 @@ Cada carpeta contiene los siguientes archivos obligatorios:
 
 El notebook principal para ejecutar el algoritmo es:
 
-MOS-Proyecto-Etapa3_casoBaseGA.ipynb
+### casoBaseGA.ipynb
 
 
 Desde allí se realiza todo el pipeline: carga de datos, ejecución del algoritmo genético, visualización de resultados, verificación y análisis de escalabilidad.
